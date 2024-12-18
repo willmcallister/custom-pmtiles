@@ -1,0 +1,211 @@
+{
+  "version": 8,
+  "name": "Empty Style",
+  "metadata": {"maputnik:renderer": "mlgljs"},
+  "sources": {
+    "Transit_PMTiles": {
+      "type": "vector",
+      "url": "pmtiles://basemap/transit-testing.pmtiles"
+    }
+  },
+  "sprite": "",
+  "glyphs": "https://orangemug.github.io/font-glyphs/glyphs/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "fill",
+      "source": "Transit_PMTiles",
+      "source-layer": "background",
+      "paint": {"fill-color": "#f0f7f1"}
+    },
+    {
+      "id": "parks",
+      "type": "fill",
+      "source": "Transit_PMTiles",
+      "source-layer": "city_parks",
+      "minzoom": 10,
+      "paint": {"fill-color": "#b6d1ba"}
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "Transit_PMTiles",
+      "source-layer": "water_bodies",
+      "minzoom": 10,
+      "paint": {"fill-color": "#A1B5C5"}
+    },
+    {
+      "id": "buildings",
+      "type": "fill",
+      "source": "Transit_PMTiles",
+      "source-layer": "buildings",
+      "minzoom": 12,
+      "paint": {
+        "fill-color": "#808E85",
+        "fill-opacity": {"stops": [[12, 0], [12.5, 1]]}
+      }
+    },
+    {
+      "id": "normal_bus_routes",
+      "type": "line",
+      "source": "Transit_PMTiles",
+      "source-layer": "bus_routes",
+      "minzoom": 11,
+      "filter": ["none", ["==", "route_id", "A"], ["==", "route_id", "B"]],
+      "paint": {
+        "line-color": ["get", "route_color"],
+        "line-width": 3,
+        "line-opacity": {"stops": [[11, 0], [11.5, 1]]}
+      }
+    },
+    {
+      "id": "rapid_bus_routes",
+      "type": "line",
+      "source": "Transit_PMTiles",
+      "source-layer": "bus_routes",
+      "minzoom": 10,
+      "filter": ["any", ["==", "route_id", "A"], ["==", "route_id", "B"]],
+      "layout": {"visibility": "visible"},
+      "paint": {"line-color": ["get", "route_color"], "line-width": 3}
+    },
+    {
+      "id": "bus_stops",
+      "type": "circle",
+      "source": "Transit_PMTiles",
+      "source-layer": "bus_stops",
+      "paint": {
+        "circle-stroke-color": "rgba(255, 255, 255, 1)",
+        "circle-stroke-width": 2
+      }
+    },
+    {
+      "id": "bike_paths_secondary",
+      "type": "line",
+      "source": "Transit_PMTiles",
+      "source-layer": "bike_paths",
+      "minzoom": 10,
+      "filter": ["all", ["==", "BFuncClass", "S"]],
+      "layout": {"visibility": "visible"},
+      "paint": {"line-color": "#489454", "line-width": 2}
+    },
+    {
+      "id": "bike_paths_primary",
+      "type": "line",
+      "source": "Transit_PMTiles",
+      "source-layer": "bike_paths",
+      "minzoom": 10,
+      "filter": ["all", ["==", "BFuncClass", "P"]],
+      "paint": {"line-color": "#489454", "line-width": 2}
+    },
+    {
+      "id": "park_labels",
+      "type": "symbol",
+      "source": "Transit_PMTiles",
+      "source-layer": "city_parks",
+      "minzoom": 10,
+      "layout": {
+        "text-field": ["coalesce", ["get", "Park_Name"], ""],
+        "text-font": ["Open Sans Regular"],
+        "icon-ignore-placement": false,
+        "icon-allow-overlap": false,
+        "visibility": "visible"
+      },
+      "paint": {"text-color": "rgba(81, 130, 85, 1)"}
+    },
+    {
+      "id": "bus_route_labels-copy",
+      "type": "symbol",
+      "source": "Transit_PMTiles",
+      "source-layer": "bus_routes",
+      "layout": {
+        "text-field": ["concat", "Route ", ["get", "route_id"]],
+        "symbol-placement": "line",
+        "text-font": ["Open Sans Bold"],
+        "text-padding": ["interpolate", ["linear"], ["zoom"], 10, 5, 16, 30],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-pitch-alignment": "auto",
+        "text-rotation-alignment": "map",
+        "text-size": 16,
+        "visibility": "none"
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "rgba(54, 54, 54, 1)",
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "bus_route_labels_rapid",
+      "type": "symbol",
+      "source": "Transit_PMTiles",
+      "source-layer": "bus_routes",
+      "filter": ["any", ["==", "route_id", "A"], ["==", "route_id", "B"]],
+      "layout": {
+        "text-field": ["concat", "Route ", ["get", "route_id"]],
+        "symbol-placement": "line",
+        "text-font": ["Open Sans Bold"],
+        "text-padding": ["interpolate", ["linear"], ["zoom"], 10, 5, 16, 30],
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-pitch-alignment": "auto",
+        "text-rotation-alignment": "map",
+        "text-size": 16,
+        "visibility": "visible"
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "rgba(54, 54, 54, 1)",
+        "text-halo-width": 2
+      }
+    },
+    {
+      "id": "major_lakes",
+      "type": "symbol",
+      "source": "Transit_PMTiles",
+      "source-layer": "water_bodies",
+      "minzoom": 10,
+      "filter": [
+        "any",
+        ["==", "name", "Lake Mendota"],
+        ["==", "name", "Lake Monona"],
+        ["==", "name", "Lake Wingra"],
+        ["==", "name", "Lake Waubesa"]
+      ],
+      "layout": {
+        "text-field": ["coalesce", ["get", "name"], ""],
+        "text-font": ["Open Sans Italic"],
+        "text-allow-overlap": false,
+        "icon-text-fit-padding": [10, 10, 10, 10]
+      },
+      "paint": {"text-color": "rgba(51, 52, 66, 1)"}
+    },
+    {
+      "id": "bike_path_labels",
+      "type": "symbol",
+      "source": "Transit_PMTiles",
+      "source-layer": "bike_paths",
+      "minzoom": 10,
+      "maxzoom": 24,
+      "layout": {
+        "text-field": ["concat", "", ["get", "Pri_Name"]],
+        "symbol-placement": "line",
+        "text-font": ["Open Sans Bold"],
+        "text-padding": ["interpolate", ["linear"], ["zoom"], 10, 5, 16, 30],
+        "text-allow-overlap": true,
+        "text-ignore-placement": false,
+        "text-pitch-alignment": "auto",
+        "text-rotation-alignment": "map",
+        "text-size": {"stops": [[10, 12], [16, 14]]},
+        "symbol-spacing": 200,
+        "symbol-avoid-edges": true
+      },
+      "paint": {
+        "text-color": "rgba(255, 255, 255, 1)",
+        "text-halo-color": "rgba(54, 54, 54, 1)",
+        "text-halo-width": 1
+      }
+    }
+  ],
+  "id": "fcz00jv"
+}
